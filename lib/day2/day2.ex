@@ -37,6 +37,12 @@ defmodule Day2 do
       String.slice(str, 0, half) == String.slice(str, half, half)
   end
 
+  # A string is periodic (repeats multiple times) if:
+  # - we double it
+  # - we remove the first and last character, and
+  # - the original string is present in the new string
+  # Source: https://www.baeldung.com/cs/check-string-periodicity
+  # "If that’s the case, s will be a proper substring of ss (not starting at the 1st and the nth positions)"
   defp repeat_many?(str) do
     doubled = str <> str
     len = String.length(str)
