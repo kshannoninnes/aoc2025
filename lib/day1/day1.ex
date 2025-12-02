@@ -7,7 +7,6 @@ defmodule Day1 do
     |> elem(0) #                              Current Ans.      Current Pos.
     |> Enum.count(fn x -> x == 0 end)
   end
-
   def part2(input) do
     input
     |> String.split("\n", trim: true)
@@ -25,12 +24,7 @@ defmodule Day1 do
   defp move(pos, {"L", n}), do: Integer.mod(pos - n, 100)
   defp move(pos, {"R", n}), do: Integer.mod(pos + n, 100)
 
-  defp click(pos, {"R", n}) do
-    div(pos + n, 100)
-  end
-
-  defp click(pos, {"L", n}) do
-    mirror = rem(100 - pos, 100) # Have to 'mirror the dial' so left moves become right moves
-    div(mirror + n, 100)
-  end
+  # Have to 'mirror the dial' so L moves become R moves
+  defp click(pos, {"L", n}), do: rem(100 - pos, 100) |> click({"R", n})
+  defp click(pos, {"R", n}), do: div(pos + n, 100)
 end
