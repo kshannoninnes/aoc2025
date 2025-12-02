@@ -1,24 +1,20 @@
 defmodule Day2 do
   def part1(input) do
-    input
-    |> String.split(",")
-    |> Enum.map(&to_range/1)
-    |> Enum.flat_map(&Enum.to_list/1)
-    |> Enum.filter(fn id ->
-      Integer.to_string(id)
-      |> repeat_twice?()
-    end)
-    |> Enum.sum()
+    solve(input, &repeat_twice?/1)
   end
 
   def part2(input) do
+    solve(input, &repeat_many?/1)
+  end
+
+  defp solve(input, repeat_func) do
     input
     |> String.split(",")
     |> Enum.map(&to_range/1)
     |> Enum.flat_map(&Enum.to_list/1)
     |> Enum.filter(fn id ->
       Integer.to_string(id)
-      |> repeat_many?()
+      |> repeat_func.()
     end)
     |> Enum.sum()
   end
