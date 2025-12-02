@@ -5,7 +5,10 @@ defmodule Day2 do
     input
     |> get_ranges()
     |> Enum.flat_map(&Enum.to_list/1)
-    |> Enum.filter(&invalid_part1?/1)
+    |> Enum.filter(fn id ->
+      Integer.to_string(id)
+      |> repeat_twice?()
+    end)
     |> Enum.sum()
   end
 
@@ -13,12 +16,12 @@ defmodule Day2 do
     input
     |> get_ranges()
     |> Enum.flat_map(&Enum.to_list/1)
-    |> Enum.filter(&invalid_part2?/1)
+    |> Enum.filter(fn id ->
+      Integer.to_string(id)
+      |> repeat_many?()
+    end)
     |> Enum.sum()
   end
-
-  defp invalid_part1?(id), do: Integer.to_string(id) |> repeat_twice?()
-  defp invalid_part2?(id), do: Integer.to_string(id) |> repeat_many?()
 
   defp get_ranges(input) do
     input
