@@ -1,19 +1,19 @@
 defmodule Day1 do
   def part1(input) do
-    input
-    |> String.split("\n", trim: true)
-    |> Enum.map(&parse_line/1)
-    |> Enum.map_reduce(50, fn step, pos -> { move(pos, step), move(pos, step) } end)
-    |> elem(0) #                              Current Ans.      Current Pos.
+    solve(input, &move/2)
     |> Enum.count(fn x -> x == 0 end)
   end
   def part2(input) do
+    solve(input, &click/2)
+    |> Enum.sum
+  end
+
+  defp solve(input, answer_func) do
     input
     |> String.split("\n", trim: true)
     |> Enum.map(&parse_line/1)
-    |> Enum.map_reduce(50, fn step, pos -> { click(pos, step), move(pos, step) } end)
-    |> elem(0)
-    |> Enum.sum
+    |> Enum.map_reduce(50, fn step, pos -> { answer_func.(pos, step), move(pos, step) } end)
+    |> elem(0) #                                Current Ans.            Current Pos.
   end
 
   defp parse_line(line) do
