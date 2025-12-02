@@ -17,11 +17,10 @@ day =
 
 module = Module.concat([:"Day#{day}"])
 
-run = fn label, contents ->
-  IO.puts("[#{label}] Day #{day}.1: #{apply(module, :part1, [contents])}")
-  IO.puts("[#{label}] Day #{day}.2: #{apply(module, :part2, [contents])}")
-end
+IO.puts("[DAY #{day}.1] Test #{day}.1: #{apply(module, :part1, [File.read!("lib/day#{day}/test")])}")
+IO.puts("[DAY #{day}.1] Real #{day}.1: #{apply(module, :part1, [File.read!("lib/day#{day}/input")])}")
 
-run.("TEST", File.read!("lib/day#{day}/test"))
 IO.puts("")
-run.("REAL", File.read!("lib/day#{day}/input"))
+
+IO.puts("[DAY #{day}.1] Test #{day}.2: #{apply(module, :part2, [File.read!("lib/day#{day}/test")])}")
+IO.puts("[DAY #{day}.1] Real #{day}.2: #{apply(module, :part2, [File.read!("lib/day#{day}/input")])}")
