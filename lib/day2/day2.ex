@@ -1,7 +1,8 @@
 defmodule Day2 do
   def part1(input) do
     input
-    |> get_ranges()
+    |> String.split(",")
+    |> Enum.map(&to_range/1)
     |> Enum.flat_map(&Enum.to_list/1)
     |> Enum.filter(fn id ->
       Integer.to_string(id)
@@ -12,7 +13,8 @@ defmodule Day2 do
 
   def part2(input) do
     input
-    |> get_ranges()
+    |> String.split(",")
+    |> Enum.map(&to_range/1)
     |> Enum.flat_map(&Enum.to_list/1)
     |> Enum.filter(fn id ->
       Integer.to_string(id)
@@ -21,13 +23,9 @@ defmodule Day2 do
     |> Enum.sum()
   end
 
-  defp get_ranges(input) do
-    input
-    |> String.split(",")
-    |> Enum.map(fn str ->
-      [a, b] = String.split(str, "-")
+  defp to_range(str) do
+    [a, b] = String.split(str, "-")
       String.to_integer(a)..String.to_integer(b)
-    end)
   end
 
   defp repeat_twice?(s) do
