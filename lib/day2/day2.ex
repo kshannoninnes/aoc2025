@@ -32,12 +32,9 @@ defmodule Day2 do
     end)
   end
 
-  defp repeat_twice?(str) do
-    len = String.length(str)
-    half = div(len, 2)
-
-    rem(len, 2) == 0 and
-      String.slice(str, 0, half) == String.slice(str, half, half)
+  defp repeat_twice?(s) do
+    {a, b} = String.split_at(s, div(String.length(s), 2))
+    a == b
   end
 
   # A string is periodic (repeats multiple times) if:
@@ -46,11 +43,10 @@ defmodule Day2 do
   # - the original string is present in the new string
   # Source: https://www.baeldung.com/cs/check-string-periodicity
   # "If that’s the case, s will be a proper substring of ss (not starting at the 1st and the nth positions)"
-  defp repeat_many?(str) do
-    doubled = str <> str
-    len = String.length(str)
-    inner = String.slice(doubled, 1, len * 2 - 2)
+  defp repeat_many?(original) do
+    len = String.length(original)
+    doubled = String.slice(original <> original, 1, len * 2 - 2)
 
-    String.contains?(inner, str)
+    String.contains?(doubled, original)
   end
 end
