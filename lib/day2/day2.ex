@@ -1,6 +1,4 @@
 defmodule Day2 do
-  require Integer
-
   def part1(input) do
     input
     |> get_ranges()
