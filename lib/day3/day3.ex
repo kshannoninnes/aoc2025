@@ -15,14 +15,14 @@ defmodule Day3 do
 
   def solve(line, num_digits) do
     line
-    |> String.graphemes()
-    |> Enum.map(&String.to_integer/1)
+    |> String.graphemes()                     # Convert string to list of characters (a.k.a graphemes)
+    |> Enum.map(&String.to_integer/1)         # For each character, convert to integer
     |> max_from_subsequence(num_digits, [])
-    |> Integer.undigits() # Convert list of digits into a single whole number
+    |> Integer.undigits()                     # Convert list of digits into a single whole number
   end
 
   defp max_from_subsequence(_digits, 0, acc) do
-    Enum.reverse(acc)
+    Enum.reverse(acc) # We've added digits in reverse order, so now we fix that and return
   end
 
   defp max_from_subsequence(digits, num_digits, acc) do
@@ -32,7 +32,7 @@ defmodule Day3 do
       digits
       |> Enum.take(max_pos + 1)             # Get the sublist starting from max_pos + 1
       |> Enum.with_index()                  # Include the index of each digit as a {digit, index} tuple
-      |> Enum.max_by(fn {d, _i} -> d end)   # Get the max digit from this sublist
+      |> Enum.max_by(fn {d, _i} -> d end)   # Get the tuple with the max_digit in it
 
     # split the current list into a new list starting after max_index
     {_, new_list} = Enum.split(digits, max_index + 1)
