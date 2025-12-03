@@ -18,7 +18,7 @@ defmodule Day3 do
     |> String.graphemes()
     |> Enum.map(&String.to_integer/1)
     |> max_from_subsequence(num_digits, [])
-    |> Integer.undigits()
+    |> Integer.undigits() # Convert list of digits into a single whole number
   end
 
   defp max_from_subsequence(_digits, 0, acc) do
