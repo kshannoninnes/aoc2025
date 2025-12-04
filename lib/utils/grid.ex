@@ -21,6 +21,41 @@ defmodule Grid do
   end
 
   @doc """
+  Updates the value at `{x, y}` in the grid and returns the new grid.
+
+  If the coordinate is out of bounds, the grid is returned unchanged.
+
+  ## Examples
+
+      iex> grid = Grid.from_string("ab\\ncd")
+      iex> grid = Grid.put(grid, {1, 0}, "X")
+      iex> Grid.at(grid, {1, 0})
+      "X"
+
+  """
+  def put(grid, coord, value) do
+    Map.put(grid, coord, value)
+  end
+
+  @doc """
+  Gets the value at `coord` in the grid, or returns `default` if it is missing.
+
+  The default is `nil` when not provided.
+
+  ## Examples
+
+      iex> grid = Grid.from_string("ab\\ncd")
+      iex> Grid.at(grid, {0, 1})
+      "c"
+      iex> Grid.at(grid, {5, 5}, "x")
+      "x"
+      iex> Grid.at(grid, {5, 5})
+      nil
+
+  """
+  def at(grid, coord, default \\ nil), do: Map.get(grid, coord, default)
+
+  @doc """
   Returns the width and height of the grid as `{width, height}`.
 
   ## Examples
@@ -59,50 +94,53 @@ defmodule Grid do
   end
 
   @doc """
-  Returns the 4-way neighbors (right, left, down, up) of a coordinate.
+  Returns the 4-way neighbours (right, left, down, up) of a coordinate,
+  excluding neighbours with negative coordinates.
 
   ## Examples
 
-      iex> Grid.neighbors4({1, 1})
+      iex> Grid.neighbours4({1, 1})
       [{2, 1}, {0, 1}, {1, 2}, {1, 0}]
 
+      iex> Grid.neighbours4({0, 0})
+      [{1, 0}, {0, 1}]
+
   """
-  def neighbors4({x, y}) do
-    [{x + 1, y}, {x - 1, y}, {x, y + 1}, {x, y - 1}]
+  def neighbours4({x, y}) do
+    [
+      {x + 1, y},
+      {x - 1, y},
+      {x, y + 1},
+      {x, y - 1}
+    ]
+    |> Enum.filter(fn {nx, ny} -> nx >= 0 and ny >= 0 end)
   end
 
   @doc """
-  Returns the 8-way neighbors (including diagonals) of a coordinate.
+  Returns the 8-way neighbours (including diagonals) of a coordinate,
+  excluding neighbours with negative coordinates.
 
   ## Examples
 
-      iex> Grid.neighbors8({1, 1})
-      [{0, 0}, {1, 0}, {2, 0}, {0, 1}, {2, 1}, {0, 2}, {1, 2}, {2, 2}]
+      iex> Grid.neighbours8({1, 1})
+      [
+        {0, 0}, {1, 0}, {2, 0},
+        {0, 1},         {2, 1},
+        {0, 2}, {1, 2}, {2, 2}
+      ]
+
+      iex> Grid.neighbours8({0, 0})
+      [{1, 0}, {0, 1}, {1, 1}]
 
   """
-  def neighbors8({x, y}) do
-    [{x - 1, y - 1}, {x, y - 1}, {x + 1, y - 1},
-    {x - 1, y},                  {x + 1, y},
-    {x - 1, y + 1},  {x, y + 1}, {x + 1, y + 1}]
+  def neighbours8({x, y}) do
+    [
+      {x - 1, y - 1}, {x, y - 1}, {x + 1, y - 1},
+      {x - 1, y},                 {x + 1, y},
+      {x - 1, y + 1}, {x, y + 1}, {x + 1, y + 1}
+    ]
+    |> Enum.filter(fn {nx, ny} -> nx >= 0 and ny >= 0 end)
   end
-
-  @doc """
-  Gets the value at `coord` in the grid, or returns `default` if it is missing.
-
-  The default is `nil` when not provided.
-
-  ## Examples
-
-      iex> grid = Grid.from_string("ab\\ncd")
-      iex> Grid.at(grid, {0, 1})
-      "c"
-      iex> Grid.at(grid, {5, 5}, "x")
-      "x"
-      iex> Grid.at(grid, {5, 5})
-      nil
-
-  """
-  def at(grid, coord, default \\ nil), do: Map.get(grid, coord, default)
 
   # Private Helper
   defp create_grid(lines) do
