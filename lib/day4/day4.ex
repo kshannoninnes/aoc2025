@@ -24,6 +24,18 @@ defmodule Day4 do
     count_removed(grid, final_grid)
   end
 
+  # Determine if a cell can be removed
+  defp removable?(grid, bounds, {coord, _value}) do
+    neighbour_coords = neighbour_coords(bounds, coord)
+
+    # Count how many populated neighbours this cell has
+    total_neighbours =
+      neighbour_coords
+      |> Enum.count(fn ncoord -> Grid.at(grid, ncoord) == "@" end)
+
+    total_neighbours < 4
+  end
+
   # Skip empty cells
   defp remove_recursively(grid, _bounds, {_coord, "."}), do: grid
 
@@ -44,18 +56,6 @@ defmodule Day4 do
       # Can't remove it so grid left unchanged
       grid
     end
-  end
-
-  # Determine if a cell can be removed
-  defp removable?(grid, bounds, {coord, _value}) do
-    neighbour_coords = neighbour_coords(bounds, coord)
-
-    # Count how many populated neighbours this cell has
-    total_neighbours =
-      neighbour_coords
-      |> Enum.count(fn ncoord -> Grid.at(grid, ncoord) == "@" end)
-
-    total_neighbours < 4
   end
 
   # Get neighbor coordinates
