@@ -69,17 +69,15 @@ defmodule Day5 do
     range_start..range_end = Enum.fetch!(ranges, median)
 
     cond do
-      # id is lower than range start (which is from the median range between low and high)
-      # therefore repeat binary_search with a new, lower, median.
+      # id is lower than the median range's starting point, choose new lower median
       id < range_start ->
         binary_search(id, ranges, low, median - 1)
 
-      # id is higher than range_end (which is from the median range between low and high)
-      # therefore repeat binary_search with a new, higher, median
+      # id is higher than the median range's stopping point, choose new higher median
       id > range_end ->
         binary_search(id, ranges, median + 1, high)
 
-      # id is not lower than range_start, and not higher than range_end, which means it's within the range!
+      # id is within the range!
       true ->
         true
     end
