@@ -11,9 +11,9 @@ defmodule Day5 do
       |> merge_ranges()
 
     ingredients
-      |> String.split("\n")
-      |> Enum.map(&String.to_integer/1)
-      |> Enum.count(fn id -> in_any_range_bs?(id, ranges) end)
+    |> String.split("\n")
+    |> Enum.map(&String.to_integer/1)
+    |> Enum.count(fn id -> in_any_range?(id, ranges) end)
   end
 
   def part2(input) do
@@ -25,7 +25,7 @@ defmodule Day5 do
     |> String.split("\n")
     |> Enum.map(&convert_to_range/1)
     |> merge_ranges()
-    |> Enum.reduce(0, fn range, acc -> acc + Range.size(range) end)
+    |> Enum.sum_by(fn range -> Range.size(range) end)
   end
 
   defp convert_to_range(range_str) do
@@ -56,7 +56,7 @@ defmodule Day5 do
     end
   end
 
-  def in_any_range_bs?(n, ranges) do
+  def in_any_range?(n, ranges) do
     binary_search(n, ranges, 0, length(ranges) - 1)
   end
 
