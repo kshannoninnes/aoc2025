@@ -40,7 +40,7 @@ defmodule Day4 do
   defp remove_recursively(grid, _bounds, {_coord, "."}), do: grid
 
   # Try to remove "@"
-  defp remove_recursively(grid, bounds, cell = {coord, value}) do
+  defp remove_recursively(grid, bounds, cell = {coord, _value}) do
     if removable?(grid, bounds, cell) do
       # Remove cell
       grid = Grid.put(grid, coord, ".")
