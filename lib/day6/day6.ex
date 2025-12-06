@@ -75,8 +75,8 @@ defmodule Day6 do
 
   # Group transposed columns into expressions, splitting wherever a blank column appears.
   #
-  # nums follows the pattern:
-  #   [expr1, "", expr2, "", ...]
+  # nums follows a pattern along the lines of:
+  #   [op1, ..., opK, "", opK+1, ..., opN, "", ...]
   #
   # Blank entries act as separators between expressions.
   #
