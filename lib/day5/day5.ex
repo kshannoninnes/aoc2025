@@ -37,7 +37,7 @@ defmodule Day5 do
 
   defp merge_ranges(ranges) do
     ranges
-    |> Enum.sort_by(fn range_start..range_stop -> range_start end)
+    |> Enum.sort_by(fn range_start.._range_stop//1 -> range_start end)
     |> Enum.reduce([], &merge_overlapping_range/2)
     |> Enum.reverse()
   end
@@ -46,7 +46,7 @@ defmodule Day5 do
   defp merge_overlapping_range(range, []), do: [range]
 
   # More ranges, attempt to merge
-  defp merge_overlapping_range(curr_start..curr_end, [prev_start..prev_end | rest]) do
+  defp merge_overlapping_range(curr_start..curr_end//1, [prev_start..prev_end//1 | rest]) do
     if curr_start <= prev_end + 1 do
       # Merge the ranges
       [prev_start..max(prev_end, curr_end) | rest]
@@ -66,7 +66,7 @@ defmodule Day5 do
   # Look for range that id belongs to
   defp binary_search(id, ranges, low, high) do
     median = div(low + high, 2)
-    range_start..range_end = Enum.fetch!(ranges, median)
+    range_start..range_end//1 = Enum.fetch!(ranges, median)
 
     cond do
       # id is lower than the median range's starting point, choose new lower median
