@@ -12,8 +12,7 @@ defmodule Day6 do
       operands
       |> Enum.map(&String.split/1)
       |> Enum.map(&to_int_list/1)
-      |> Enum.zip()
-      |> Enum.map(&Tuple.to_list/1)
+      |> Enum.zip_with(fn a -> a end)
 
     solve_the_math(operators, operands)
   end
