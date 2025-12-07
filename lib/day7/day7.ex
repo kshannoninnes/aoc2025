@@ -33,7 +33,7 @@ defmodule Day7 do
     new_beams =
       beams_on_splitters
 
-      # For each splitter beam, replace it with two new beams
+      # Merge the splitter and regular beams, replacing each of the splitter beams with 2 new outgoing beams
       |> Enum.reduce(regular_beams, fn {col, row}, acc ->
         [{col - 1, row}, {col + 1, row} | acc]
       end)
