@@ -88,8 +88,9 @@ defmodule Day7 do
         next_row = row + 1
 
         # These are returned from the if-expression below
-        # Next cell is a splitter: beam splits into left and right.
         {path_count, memo_after} =
+
+          # Next cell is a splitter: beam splits into left and right.
           if MapSet.member?(splitter_positions, {col, next_row}) do
             # Calculate the counts for both left and right sub-trees
             {left_count, memo_left} =
