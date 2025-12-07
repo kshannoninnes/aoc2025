@@ -92,6 +92,7 @@ defmodule Day7 do
 
           # Next cell is a splitter: beam splits into left and right.
           if MapSet.member?(splitter_positions, {col, next_row}) do
+
             # Calculate the counts for both left and right sub-trees
             {left_count, memo_left} =
               count_paths({col - 1, next_row}, splitter_positions, max_height, memo)
@@ -102,7 +103,7 @@ defmodule Day7 do
             # Sum the counts, and memo_right already includes all the entries from memo_left
             {left_count + right_count, memo_right}
 
-            # Normal cell: beam continues straight down.
+          # Normal cell: beam continues straight down.
           else
             count_paths({col, next_row}, splitter_positions, max_height, memo)
           end
