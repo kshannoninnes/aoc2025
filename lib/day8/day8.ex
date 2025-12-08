@@ -103,7 +103,7 @@ defmodule Day8 do
   # Add one edge (first, second) into the current list of circuits.
   #
   # Input:
-  #   circuits: a list of circuits, where each circuit is a list of coord tuples
+  #   circuits: a list of circuits, where each circuit is a set of coord tuples
   #   first/second: coord tuples to connect
   #
   # Output:
