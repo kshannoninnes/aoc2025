@@ -213,17 +213,22 @@ defmodule Day9 do
   #
   # It works by using math to simulate an infinite horizontal line extending out to
   # the right of a point and counting how many times it crosses an edge. If it's odd,
-  # the line originated from inside a the polygon, and if it's even then outside.
+  # the original point is positioned inside the polygon, and if it's even then outside.
   #
-  # To simulate this line, we perform two tests for each of the polygon's edges:
+  # To simulate this line, we perform tests for each of the polygon's edges:
   #
-  # 1) Check whether point_y is between y1 and y2, the y-values of this edge’s endpoints.
+  # y1 > point_y != y2 > point_y
+  #    Check whether point_y is between y1 and y2, the y-values of this edge’s endpoints.
   #    This means one endpoint lies above the point and the other lies below it. If this
   #    is not true, then our horizontal line at point_y can never touch this edge.
   #
-  # 2) Work out where this edge would meet that horizontal line: at what x coordinate on
-  #    the edge would an intersection occur? If that x coordinate is to the right of the
-  #    point’s x (point_x), then this edge is one of the crossings we count for the ray.
+  # (x2 - x1) * (point_y - y1) / (y2 - y1) + x1
+  #      Work out where this edge would meet that horizontal line: at what x coordinate on
+  #      the edge would an intersection occur?
+  #
+  # point_x < calculated_x
+  #      If the calculated x coordinate is to the right of the point’s x (point_x), then
+  #      this edge is one of the crossings we count for the ray.
   defp point_fully_inside_polygon?({point_x, point_y}, polygon_edges) do
     Enum.reduce(polygon_edges, false, fn {{x1, y1}, {x2, y2}}, inside? ->
       crosses? =
