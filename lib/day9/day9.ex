@@ -114,6 +114,26 @@ defmodule Day9 do
     end
   end
 
+  # Generate the edges for a rectangle represented by 2 opposite points
+  defp build_rectangle_edges({x1, y1}, {x2, y2}) do
+    left = min(x1, x2)
+    right = max(x1, x2)
+    bottom = min(y1, y2)
+    top = max(y1, y2)
+
+    top_left = {left, top}
+    top_right = {right, top}
+    bottom_right = {right, bottom}
+    bottom_left = {left, bottom}
+
+    [
+      {top_left, top_right},
+      {top_right, bottom_right},
+      {bottom_right, bottom_left},
+      {bottom_left, top_left}
+    ]
+  end
+
   # A rectangle is valid if:
   # - All 4 corners are considered valid, AND
   # - None of the edges of the rectangle cross any edges of the polygon
@@ -206,6 +226,18 @@ defmodule Day9 do
     point_on_edge or point_fully_inside_polygon?(point, polygon_edges)
   end
 
+  # This function checks whether the point lies somewhere on the infinite line
+  # defined by the edge, and if so, whether it also lies between the start and
+  # end of the edge.
+  defp point_on_edge?({px, py}, {x1, y1}, {x2, y2}) do
+    collinear = determine_side({x1, y1}, {x2, y2}, {px, py}) == :collinear
+
+    within_x = px >= min(x1, x2) and px <= max(x1, x2)
+    within_y = py >= min(y1, y2) and py <= max(y1, y2)
+
+    collinear and within_x and within_y
+  end
+
   # This is also something I needed a LOT of help with.
   #
   # The algorithm for this function is the ray-casting algorithm:
@@ -237,37 +269,5 @@ defmodule Day9 do
 
       if crosses?, do: not inside?, else: inside?
     end)
-  end
-
-  # Generate the edges for a rectangle represented by 2 opposite points
-  defp build_rectangle_edges({x1, y1}, {x2, y2}) do
-    left = min(x1, x2)
-    right = max(x1, x2)
-    bottom = min(y1, y2)
-    top = max(y1, y2)
-
-    top_left = {left, top}
-    top_right = {right, top}
-    bottom_right = {right, bottom}
-    bottom_left = {left, bottom}
-
-    [
-      {top_left, top_right},
-      {top_right, bottom_right},
-      {bottom_right, bottom_left},
-      {bottom_left, top_left}
-    ]
-  end
-
-  # This function checks whether the point lies somewhere on the infinite line
-  # defined by the edge, and if so, whether it also lies between the start and
-  # end of the edge.
-  defp point_on_edge?({px, py}, {x1, y1}, {x2, y2}) do
-    collinear = determine_side({x1, y1}, {x2, y2}, {px, py}) == :collinear
-
-    within_x = px >= min(x1, x2) and px <= max(x1, x2)
-    within_y = py >= min(y1, y2) and py <= max(y1, y2)
-
-    collinear and within_x and within_y
   end
 end
