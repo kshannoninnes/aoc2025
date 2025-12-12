@@ -39,6 +39,46 @@ defmodule Day11 do
     end)
   end
 
+  # Topological sort orders nodes so that, for every directed edge a->b,
+  # node b appears earlier in the list than node a. This is the reverse of
+  # the typical topological order (where a appears earlier than b). This is
+  # done intentionally to ensure each node is processed only after all paths
+  # flowing into it have been handled.
+  #
+  # Topological sort only works on directed graphs because if there's an
+  # edge from a->b, and some way of getting back to a from b, then you can't
+  # choose which node appears earlier in the sorted list. Many systems use this
+  # to ensure proper handling of dependencies (such as in code package tools).
+  defp topological_sort(graph) do
+    {order, _} =
+      Enum.reduce(Map.keys(graph), {[], MapSet.new()}, fn node, {order, visited} ->
+        topological_dfs(graph, node, order, visited)
+      end)
+
+    order
+  end
+
+  # To achieve this, we use DFS to visit all outgoing neighbours of a node first.
+  # A node is added to the order only after all such neighbours have been
+  # processed, so nodes that appear later in the graph appear earlier in the
+  # resulting list.
+  defp topological_dfs(graph, node, order, visited) do
+    if node in visited do
+      {order, visited}
+    else
+      visited = MapSet.put(visited, node)
+
+      {order, visited} =
+        graph
+        |> Map.get(node, [])
+        |> Enum.reduce({order, visited}, fn adjacent_node, {order, visited} ->
+          topological_dfs(graph, adjacent_node, order, visited)
+        end)
+
+      {[node | order], visited}
+    end
+  end
+
   # Count directed paths from start_node to target_node.
   #
   # The graph is processed in topological order, and for each node we track the
@@ -124,44 +164,5 @@ defmodule Day11 do
       end)
 
     Map.get(path_counts_final, {target_node, true, true}, 0)
-  end
-
-  # Topological sort orders nodes so that, for every directed edge a->b,
-  # node b appears earlier in the list than node a. This is the reverse of
-  # the typical topological order (where a appears earlier than b). This is
-  # done intentionally to ensure each node is processed only after all paths
-  # flowing into it have been handled.
-  #
-  # Topological sort only works on directed graphs because if there's an
-  # edge from a->b, and some way of getting back to a from b, then you can't
-  # choose which node appears earlier in the sorted list.
-  defp topological_sort(graph) do
-    {order, _} =
-      Enum.reduce(Map.keys(graph), {[], MapSet.new()}, fn node, {order, visited} ->
-        topological_dfs(graph, node, order, visited)
-      end)
-
-    order
-  end
-
-  # To achieve this, we use DFS to visit all outgoing neighbours of a node first.
-  # A node is added to the order only after all such neighbours have been
-  # processed, so nodes that appear later in the graph appear earlier in the
-  # resulting list.
-  defp topological_dfs(graph, node, order, visited) do
-    if node in visited do
-      {order, visited}
-    else
-      visited = MapSet.put(visited, node)
-
-      {order, visited} =
-        graph
-        |> Map.get(node, [])
-        |> Enum.reduce({order, visited}, fn adjacent_node, {order, visited} ->
-          topological_dfs(graph, adjacent_node, order, visited)
-        end)
-
-      {[node | order], visited}
-    end
   end
 end
