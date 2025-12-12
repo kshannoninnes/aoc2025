@@ -1,4 +1,9 @@
 defmodule Day11 do
+  # Both parts use topological sort and a style of DFS to effectively "work
+  # backwards". This means that for each node, we process all of its child nodes
+  # (ie. the outgoing neighbours) first. This allows us to go all the way to the
+  # end of the graph, then start counting paths to each parent node, working our
+  # way back to the start node.
   def part1(input) do
     graph =
       input
